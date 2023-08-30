@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loan Payment App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color:rgb(248, 239, 247);
+    }
+    header {
+      background-color: #4d9fa4;
+      color: #ffffff;
+      text-align: center;
+      padding: 20px;
+    }
+    main {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+    section {
+      margin-bottom: 40px;
+      border: 1px solid #100b0b;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    h2 {
+      margin-top: 0;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      background-color:#58c3cb;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Loan Payment</h1>
+  </header>
+  <main>
+    <section class="balance-section">
+      <h2>Balance</h2>
+      <p><strong>Your Current Balance:</strong> $10,000</p>
+    </section>
+    <section class="loan-section">
+      <h2>Loan Information</h2>
+      <p><strong>Purpose of Loan:</strong> Home Purchase</p>
+      <p><strong>Loan Amount:</strong> $200,000</p>
+      <p><strong>Interest Rate:</strong> 5%</p>
+    </section>
+    <section class="spending-section">
+      <h2>Spending History</h2>
+      <ul id="spendingList">
+        <li>Groceries - $150</li>
+        <li>Utilities - $80</li>
+        <li>Dining Out - $50</li>
+        <li>Entertainment - $30</li>
+      </ul>
+    </section>
+    <section class="repayment-section">
+      <h2>Repayment Details</h2>
+      <p><strong>Monthly Payment:</strong> $1,073.64</p>
+      <p><strong>Total Repaid:</strong> $12,883.68</p>
+    </section>
+    <section class="transaction-section">
+      <h2>Transaction</h2>
+      <button id="payButton">Pay Money</button>
+      <button id="receiveButton">Receive Money</button>
+    </section>
+  </main>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const payButton = document.getElementById("payButton");
+      const receiveButton = document.getElementById("receiveButton");
+      const spendingList = document.getElementById("spendingList");
+      let currentBalance = 10000;
+  
+      payButton.addEventListener("click", function () {
+        const paymentAmount = parseFloat(prompt("Enter payment amount:"));
+        if (isNaN(paymentAmount) || paymentAmount <= 0) {
+          alert("Invalid amount.");
+        } else if (paymentAmount > currentBalance) {
+          alert("Insufficient funds.");
+        } else {
+          currentBalance -= paymentAmount;
+          updateBalance();
+          updateSpending(`Payment - $${paymentAmount.toFixed(2)}`);
+          alert(`Payment of $${paymentAmount.toFixed(2)} successful.`);
+        }
+      });
+  
+      receiveButton.addEventListener("click", function () {
+        const receivedAmount = parseFloat(prompt("Enter received amount:"));
+        if (isNaN(receivedAmount) || receivedAmount <= 0) {
+          alert("Invalid amount.");
+        } else {
+          currentBalance += receivedAmount;
+          updateBalance();
+          updateSpending(`Received - $${receivedAmount.toFixed(2)}`);
+          alert(`Received $${receivedAmount.toFixed(2)}.`);
+        }
+      });
+  
+      function updateBalance() {
+        const balanceElement = document.querySelector(".balance-section p");
+        balanceElement.innerHTML = `<strong>Your Current Balance:</strong> $${currentBalance.toFixed(2)}`;
+        
+        // Check if the balance goes below 20% and show an alert
+        if (currentBalance < 0.3 * 10000) {
+          alert("Your balance is below 30% of the initial amount!");
+          
+        }
+      }
+  
+      function updateSpending(item) {
+        const listItem = document.createElement("li");
+        listItem.textContent = item;
+        spendingList.appendChild(listItem);
+      }
+    });
+  </script>
+</body>
+</html>

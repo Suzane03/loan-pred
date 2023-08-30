@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Eligibility Prediction</title>
+    <link rel="stylesheet" href="s.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Style for the chart container */
+        #riskPieChartContainer {
+            width: 200px;
+            height: 200px;
+            margin: auto;
+        }
+        
+    </style>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: white;">
+
+    <div style="text-align: center; margin-top: 50px;">
+        <h1 style="color: #333;">Loan Eligibility Prediction</h1>
+        <form style="background-color:#45e4d7; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);">
+            <form style="background-color:rgb(241, 248, 249); padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);">
+
+                <label for="stress">How do you handle stress?</label>
+                <select id="stress" name="stress">
+                    <option value="well">Well</option>
+                    <option value="average">Average</option>
+                    <option value="poorly">Poorly</option>
+                </select>
+    
+                <label for="decisions">How do you make decisions?</label>
+                <select id="decisions" name="decisions">
+                    <option value="quickly">Quickly</option>
+                    <option value="thoughtfully">Thoughtfully</option>
+                    <option value="procrastinate">Procrastinate</option>
+                </select>
+    
+                <label for="communication">How comfortable are you with saving money ?</label>
+                <select id="communication" name="communication">
+                    <option value="very">Very comfortable</option>
+                    <option value="moderate">Moderate</option>
+                    <option value="not">Not comfortable</option>
+                </select>
+    
+                <label for="risk">How willing are you to take risks?</label>
+                <select id="risk" name="risk">
+                    <option value="high">Highly willing</option>
+                    <option value="moderate">Moderate</option>
+                    <option value="low">Not willing</option>
+                </select>
+    
+                <label for="goals">How goal-oriented are you?</label>
+                <select id="goals" name="goals">
+                    <option value="very">Very goal-oriented</option>
+                    <option value="moderate">Moderate</option>
+                    <option value="not">Not goal-oriented</option>
+                </select>
+    
+                <label for="social">How socially active are you?</label>
+                <select id="social" name="social">
+                    <option value="very">Very socially active</option>
+                    <option value="moderate">Moderate</option>
+                    <option value="not">Not socially active</option>
+                </select>
+    
+                <label for="persistence">How persistent are you in pursuing goals?</label>
+                <select id="persistence" name="persistence">
+                    <option value="high">Highly persistent</option>
+                    <option value="moderate">Moderate</option>
+                    <option value="low">Not persistent</option>
+                </select>
+    
+                <label for="trust">How trusting are you of others?</label>
+                <select id="trust" name="trust">
+                    <option value="very">Very trusting</option>
+                    <option value="moderate">Moderate</option>
+                    <option value="not">Not trusting</option>
+                </select>
+    
+                <label for="patience">How patient are you?</label>
+                <select id="patience" name="patience">
+                    <option value="high">Highly patient</option>
+                    <option value="moderate">Moderate</option>
+                    <option value="low">Not patient</option>
+                </select>
+    
+                <label for="organization">How organized are you?</label>
+                <select id="organization" name="organization">
+                    <option value="very">Very organized</option>
+                    <option value="moderate">Moderate</option>
+                    <option value="not">Not organized</option>
+                </select>
+    
+                <button type="button" onclick="predictLoan()">Predict</button>
+            </form>
+
+
+            <button type="button" onclick="predictLoan()">Predict</button>
+        </form>
+        <div class="prediction">
+            <h2>Prediction:</h2>
+            <p id="predictionText">Please answer all questions to get a prediction.</p>
+        </div>
+    </div>
+    <div id="riskPieChartContainer">
+        <canvas id="riskPieChart"></canvas>
+    </div>
+    <script >
+        var riskPieChart;
+
+        function predictLoan() {
+            // Get selected answers
+            var stress = document.getElementById("stress").value;
+            var decisions = document.getElementById("decisions").value;
+            var communication = document.getElementById("communication").value;
+            var risk = document.getElementById("risk").value;
+            var goals = document.getElementById("goals").value;
+            var social = document.getElementById("social").value;
+            var persistence = document.getElementById("persistence").value;
+            var trust = document.getElementById("trust").value;
+            var patience = document.getElementById("patience").value;
+            var organization = document.getElementById("organization").value;
+        
+            // Hypothetical prediction logic
+            var prediction = "Eligible for loan";
+            var riskData = [40, 60];
+            var riskLabels = ["Low Risk", "High Risk"];
+    
+            if (stress === "poorly" || decisions === "procrastinate" || communication === "not" ||
+                risk === "high" || goals === "not" || social === "not" || persistence === "low" ||
+                trust === "not" || patience === "low" || organization === "not") {
+                prediction = "Not eligible for loan";
+                riskData = [20, 80] || [30,70]; // High risk
+            } else {
+                riskData = [90, 10] || [75,25]; // Low risk
+            }
+        
+            // Display prediction
+            var predictionText = document.getElementById("predictionText");
+            predictionText.textContent = "Loan Eligibility Prediction: " + prediction;
+    
+            if (riskPieChart) {
+                riskPieChart.destroy();
+            }
+    
+            var ctx = document.getElementById("riskPieChart").getContext("2d");
+            riskPieChart = new Chart(ctx, {
+                type: "pie",
+                data: {
+                    labels: riskLabels,
+                    datasets: [{
+                        data: riskData,
+                        backgroundColor: ["green", "red"],
+                        borderColor: ["rgba(75, 192, 192, 1)", "rgba(255, 99, 132, 1)"],
+                        borderWidth: 1
+                    }]
+                }
+            });
+        }
+    </script>
+    <a href="{{ url_for('pay') }}">
+        <button style="background-color: #0b5536; color: white; padding: 15px 30px; font-size: 20px; border: none; border-radius: 4px; cursor: pointer;">
+          Loan App
+        </button>
+      </a>
+</body>
+</html>
